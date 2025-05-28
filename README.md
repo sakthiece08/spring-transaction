@@ -4,6 +4,7 @@
 consistent and its integrity is maintained.
 
 * REQUIRED : Join an existing transaction or create a new one if not exist
+  ![name-of-you-image](https://github.com/sakthiece08/spring-transaction/blob/master/src/main/resources/images/Required.jpg)
 * REQUIRES_NEW : Always create a new transaction , suspending if any existing transaction
 * MANDATORY : Require an existing transaction , if nothing found it will throw exception
 * NEVER : Ensure the method will run without transaction , throw an exception if found any
