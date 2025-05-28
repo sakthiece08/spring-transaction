@@ -1,29 +1,27 @@
 package org.teqmonic.springtransaction.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "audit_log")
+@AllArgsConstructor
+@NoArgsConstructor
 public class AuditLog {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @SequenceGenerator(name = "audit_id_seq_gen", sequenceName = "audit_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "audit_id_seq_gen")
     private Long id;
 
     private Long orderId;  // The order associated with the log
 
     private String action;  // Action taken (e.g., "Order Placed", "Payment Failed")
 
-    private LocalDateTime timestamp;  // Timestamp of the action
-
-    // Default constructor
-    public AuditLog() {
-        this.timestamp = LocalDateTime.now();  // Default timestamp is the current time
-    }
+    private LocalDateTime timeStamp;  // Timestamp of the action
 
     // Getters and setters
     public Long getId() {
@@ -50,11 +48,11 @@ public class AuditLog {
         this.action = action;
     }
 
-    public LocalDateTime getTimestamp() {
-        return timestamp;
+    public LocalDateTime getTimeStamp() {
+        return timeStamp;
     }
 
-    public void setTimestamp(LocalDateTime timestamp) {
-        this.timestamp = timestamp;
+    public void setTimeStamp(LocalDateTime timeStamp) {
+        this.timeStamp = timeStamp;
     }
 }

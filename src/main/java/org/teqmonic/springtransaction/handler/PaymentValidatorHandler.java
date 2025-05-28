@@ -1,5 +1,7 @@
 package org.teqmonic.springtransaction.handler;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.teqmonic.springtransaction.entity.AuditLog;
 import org.teqmonic.springtransaction.entity.Order;
 import org.teqmonic.springtransaction.repo.AuditLogRepository;
@@ -7,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.teqmonic.springtransaction.service.OrderProcessingService;
 
 import java.time.LocalDateTime;
 
@@ -16,8 +19,11 @@ public class PaymentValidatorHandler {
     @Autowired
     private AuditLogRepository auditLogRepository;
 
-  @Transactional(propagation = Propagation.NESTED)
+    Logger logger = LoggerFactory.getLogger(PaymentValidatorHandler.class);
+
+  @Transactional(propagation = Propagation.MANDATORY)
     public void validatePayment(Order order) {
+      logger.info("In validatePayment for Order id {}", order.getId());
         // Assume payment processing happens here
         boolean paymentSuccessful = false;
 
@@ -26,11 +32,8 @@ public class PaymentValidatorHandler {
             AuditLog paymentFailureLog = new AuditLog();
             paymentFailureLog.setOrderId(Long.valueOf(order.getId()));
             paymentFailureLog.setAction("Payment Failed for Order");
-            paymentFailureLog.setTimestamp(LocalDateTime.now());
+            paymentFailureLog.setTimeStamp(LocalDateTime.now());
 
-            if(order.getTotalPrice()>1000){
-                throw new RuntimeException("Error in payment validator");
-            }
             // Save the payment failure log
             auditLogRepository.save(paymentFailureLog);
         }

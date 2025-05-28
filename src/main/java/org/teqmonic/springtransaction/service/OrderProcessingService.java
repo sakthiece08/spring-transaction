@@ -55,7 +55,7 @@ public class OrderProcessingService {
 
     //outer tx
     // isolation : controls the visibility of changes made by one transaction to other transaction
-    @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRED) // add noRollBack attribute if inner txn failure shouldn't impact outer txn
     public Order placeAnOrder(Order order) {
 
         // get product inventory
@@ -69,26 +69,22 @@ public class OrderProcessingService {
         order.setStatus("PLACED");
 
         Order saveOrder = null;
-        //try {
-            //save order
+        try {
             saveOrder = orderHandler.saveOrder(order);
-
-            //update stock in inventory
             updateInventoryStock(order, product);
-          //  auditLogHandler.logAuditDetails(order, "order placement succeeded");
-       // } catch (Exception ex) {
-         //   System.out.println(ex);
-         //   auditLogHandler.logAuditDetails(order, "order placement failed");
-       // }
+            // Audit handler should be executed in a new transaction since it is an independent transaction, REQUIRES_NEW
+            auditLogHandler.logAuditDetails(order, "order placement succeeded");
+        } catch (Exception ex) {
+           auditLogHandler.logAuditDetails(order, "order placement failed");
+        }
+        // *** Both NOT_SUPPORTED and SUPPORTS works without any transactions
 
-        //retries 3
-        //notificationHandler.sendOrderConfirmationNotification(order);
-
-       //  paymentValidatorHandler.validatePayment(order);
-
-        // recommendationHandler.getRecommendations();
-
-//        getCustomerDetails();
+        // MANDATORY propagation, uses the current parent transaction if the parent transaction is still valid
+        paymentValidatorHandler.validatePayment(order);
+        // NOT_SUPPORTED propagation, returns additional relevant details to the user
+        recommendationHandler.getRecommendations();
+        // SUPPORTS, works with/without transaction
+        getCustomerDetails();
 
         return saveOrder;
     }
@@ -100,12 +96,14 @@ public class OrderProcessingService {
     }
 
     // Call this method after placeAnOrder is successfully completed
-    public void processOrder(Order order) {
+    public Order processOrder(Order order) {
         // Step 1: Place the order
         Order savedOrder = placeAnOrder(order);
 
         // Step 2: Send notification (non-transactional)
-        notificationHandler.sendOrderConfirmationNotification(order);
+        // NEVER propagation, shouldn't part of any transaction scope
+       notificationHandler.sendOrderConfirmationNotification(savedOrder);
+       return savedOrder;
     }
 
     private static void validateStockAvailability(Order order, Product product) {
