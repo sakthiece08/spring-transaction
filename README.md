@@ -9,7 +9,16 @@
 *  Docker Compose
 *  Mysql DB
 
-**@Transactional annotation Propagation types:**
+**Spring transaction overview**
+* Spring transaction uses AOP (Aspect)
+* Around advice (before op + after op)
+* before op: Create/get transaction
+* after op (success): Commit the transaction
+* after op (failure): Rollback the transaction
+
+
+
+**Propagation types:**
 
 * REQUIRED : Join an existing transaction or create a new one if not exist (When all transactions will either succeed or failure completely)
   ![name-of-you-image](https://github.com/sakthiece08/spring-transaction/blob/master/src/main/resources/images/Required.jpg)
