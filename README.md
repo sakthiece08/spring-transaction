@@ -51,10 +51,6 @@ show VARIABLES LIKE 'transaction_isolation';
 
 output: READ-UNCOMMITTED
 ```
-Postgres does not support READ_UNCOMMITTED isolation and falls back to READ_COMMITED instead.
-Also, Oracle does not support or allow READ_UNCOMMITTED.
-
-REPEATABLE_READ is the default level in Mysql. Oracle does not support REPEATABLE_READ.
 
 *  **_READ UNCOMMITTED_**
 
@@ -65,33 +61,39 @@ SET SESSION TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
 
 Transaction A trying to update a value. Before Transaction A commits, a concurrent Transaction B reads the value which is not yet committed 
 by the other transaction causing Dirty read.
-```
+
 ![name-of-you-image](https://github.com/sakthiece08/spring-transaction/blob/master/src/main/resources/images/Uncommited.jpg)
-```
+
 * **_READ COMMITTED_**
 
 Transaction A trying to update a value.  concurrent Transaction B reads the last committed value and not the ongoing update which is not yet
 committed by Transaction A.
-```
+
 ![name-of-you-image](https://github.com/sakthiece08/spring-transaction/blob/master/src/main/resources/images/Committed.jpg)
-```
+
 * **_REPEATABLE READ_**
 
 The Repeatable Read isolation level only sees data committed before the transaction began; it never sees either uncommitted data or changes committed by concurrent transactions during the transaction's execution.
 It prevents non repeatable read.
-```
+
 ![name-of-you-image](https://github.com/sakthiece08/spring-transaction/blob/master/src/main/resources/images/Repeatable_read.jpg)
-```
+
 * SERIALIZABLE
 
 SERIALIZABLE is the highest level of isolation. 
 It prevents all mentioned concurrency side effects, but can lead to the lowest concurrent access rate because it executes concurrent calls sequentially.
 See order of execution of transactions below, no data inconsistency
 
-```
 ![name-of-you-image](https://github.com/sakthiece08/spring-transaction/blob/master/src/main/resources/images/Serialzable.jpg)
-```
 
+**_Note:_**
+* Postgres does not support READ_UNCOMMITTED isolation and falls back to READ_COMMITED instead.
+* Also, Oracle does not support or allow READ_UNCOMMITTED.
+* REPEATABLE_READ is the default level in Mysql. Oracle does not support REPEATABLE_READ.
+
+**Non-repeatable read(fuzzy read)** is that a transaction reads the same row at least twice but the same row's data is different between the 1st and 2nd reads because other transactions update the same row's data and commit at the same time(concurrently).
+
+**Phantom read** is that a transaction reads the same table at least twice but the number of the same table's rows is different between the 1st and 2nd reads because other transactions insert or delete rows and commit at the same time(concurrently).
 
 
 **Summary**
@@ -101,9 +103,6 @@ See order of execution of transactions below, no data inconsistency
 * REPEATABLE_READ prevents two anomalies: Dirty reads and Non-repeatable reads
 * SERIALIZABLE prevents all three anomalies: Dirty reads, Non-repeatable reads and Phantom reads
 
-**Non-repeatable read(fuzzy read)** is that a transaction reads the same row at least twice but the same row's data is different between the 1st and 2nd reads because other transactions update the same row's data and commit at the same time(concurrently).
-
-**Phantom read** is that a transaction reads the same table at least twice but the number of the same table's rows is different between the 1st and 2nd reads because other transactions insert or delete rows and commit at the same time(concurrently).
 
 
 ### Links
