@@ -7,6 +7,7 @@
 *  Maven
 *  Spring Boot 3.4.2
 *  Docker Compose
+*  Mysql DB
 
 **@Transactional annotation Propagation types:**
 
