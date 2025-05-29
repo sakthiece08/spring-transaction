@@ -2,7 +2,13 @@
 
 #### Transaction helps to manage and maintains atomicity of multiple transactions performed within a method. So the data is consistent and its integrity is maintained.
 
-**@Transactional annotation types:**
+### Tech stack used
+*  Java 21
+*  Maven
+*  Spring Boot 3.4.2
+*  Docker Compose
+
+**@Transactional annotation Propagation types:**
 
 * REQUIRED : Join an existing transaction or create a new one if not exist (When all transactions will either succeed or failure completely)
   ![name-of-you-image](https://github.com/sakthiece08/spring-transaction/blob/master/src/main/resources/images/Required.jpg)
@@ -107,6 +113,7 @@ See order of execution of transactions below, no data inconsistency
 
 
 ### Links
+Use below Swagger link to test the endpoints:
 http://localhost:8090/swagger-ui/index.html
 
 ### References
