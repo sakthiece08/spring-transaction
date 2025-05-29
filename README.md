@@ -1,7 +1,8 @@
 ### Spring Transaction
 
-#### Transaction helps to manage and maintains atomicity of multiple transactions performed within a method. So the data is
-consistent and its integrity is maintained.
+#### Transaction helps to manage and maintains atomicity of multiple transactions performed within a method. So the data is consistent and its integrity is maintained.
+
+**@Transactional annotation types:**
 
 * REQUIRED : Join an existing transaction or create a new one if not exist (When all transactions will either succeed or failure completely)
   ![name-of-you-image](https://github.com/sakthiece08/spring-transaction/blob/master/src/main/resources/images/Required.jpg)
