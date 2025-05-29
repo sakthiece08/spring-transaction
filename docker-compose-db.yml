@@ -1,11 +1,16 @@
 version: '3.8'
 services:
-  db:
-    image: postgres:15.8-alpine
-    container_name: postgresql-container
+  mysqlDB:
+    image: mysql:latest
+    container_name: spring-txn-mysql-container
     environment:
-      - POSTGRES_DB=postgres
-      - POSTGRES_USER=user
-      - POSTGRES_PASSWORD=user
+      MYSQL_ROOT_PASSWORD: user
+      MYSQL_DATABASE: mysql
+      MYSQL_USER: user
+      MYSQL_PASSWORD: user
     ports:
-      - "15432:5432"
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql  # Volume configuration for MySQL data
+volumes:
+  mysql-data:  # Define a named volume for MySQL data persistence

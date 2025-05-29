@@ -18,11 +18,11 @@ public class ProductRecommendationHandler {
         // Simulate hardcoded product recommendations
         List<Product> recommendations = new ArrayList<>();
 
-       recommendations.add(new Product(101, "Wireless Headphones", 99.99, 50));
+      /** recommendations.add(new Product(101, "Wireless Headphones", 99.99, 50));
         recommendations.add(new Product(102, "Smartphone Case", 19.99, 200));
         recommendations.add(new Product(103, "Bluetooth Speaker", 49.99, 75));
         recommendations.add(new Product(104, "Gaming Mouse", 59.99, 100));
-
+**/
         System.out.println("Recommendations fetched for customer ");
         return recommendations;
     }
